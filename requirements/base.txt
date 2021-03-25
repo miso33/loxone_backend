@@ -5,3 +5,11 @@ psycopg2==2.8.6
 django-model-utils==4.1.1
 django-cleanup==5.1.0
 django-import-export==2.5.0
+django-cors-headers==3.7.0
+djangorestframework==3.12.3
+dj-rest-auth==2.1.4
+djangorestframework-simplejwt==4.6.0
+drf-writable-nested==0.6.2
+djangorestframework-filters==1.0.0.dev0
+drf-api-tracking==1.7.8
+drf-renderer-xlsx==0.3.9

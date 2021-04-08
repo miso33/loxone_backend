@@ -1,16 +1,7 @@
 import factory
 from django.contrib.auth import get_user_model
-from django.contrib.auth.models import Group
-
 
 UserModel = get_user_model()
-
-
-class GroupFactory(factory.django.DjangoModelFactory):
-    class Meta:
-        model = Group
-
-    name = UserModel.Types.OPERATOR
 
 
 class UserFactory(factory.django.DjangoModelFactory):

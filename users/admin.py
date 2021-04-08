@@ -15,7 +15,7 @@ def add_user_to_public_group(sender, instance, created, **kwargs):
     """Post-create user signal that adds the user to everyone group."""
 
     try:
-        if created and instance.type:
+        if created and hasattr(instance, "type"):
             instance.groups.add(Group.objects.get(name=instance.type))
     except Group.DoesNotExist:
         pass

@@ -10,7 +10,7 @@ User = get_user_model()
 
 class UserViewSet(BaseView):
     filter_class = UserFilter
-    queryset = User.objects.filter(is_superuser=False)
+    queryset = User.objects.filter()
     permission_classes = (ViewDjangoModelPermission,)
     serializer_class = UserSerializer
 

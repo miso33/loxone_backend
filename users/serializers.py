@@ -12,7 +12,7 @@ class UserSerializer(WritableNestedModelSerializer):
 
     class Meta:
         model = User
-        fields = ['id', 'username', 'type', 'password']
+        fields = ['id', 'username', 'password']
 
     def create(self, validated_data):
         password = validated_data.pop('password')

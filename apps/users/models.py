@@ -3,5 +3,6 @@ from django.db import models
 
 
 class User(AbstractUser):
-    class Types(models.TextChoices):
-        pass
+    pass
+    # class Types(models.TextChoices):
+    #     pass

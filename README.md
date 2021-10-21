@@ -9,7 +9,7 @@ Framework : Django  3.1.7
 `$ pip install -r requirements/local.txt`  
 
 ### Run application:
-`python manage.py runserver --settings=loxone_backend.settings.local`
+`python manage.py runserver --settings=config.settings.local`
 
 ## Production:
 

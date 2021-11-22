@@ -62,6 +62,7 @@ def scraper_historical(date_start, date_end):
                 ),
             )
         except Exception as e:
+            print(e)
             capture_exception(e)
 
 

@@ -8,7 +8,6 @@ User = get_user_model()
 
 
 class BaseAPITestCase(APITestCase, URLPatternsTestCase):
-
     def setUp(self):
         if User.Types:
             self.first_user = UserFactory(type=User.Types[0])
@@ -18,6 +17,4 @@ class BaseAPITestCase(APITestCase, URLPatternsTestCase):
             self.first_user.groups.add(group[0])
         else:
             self.first_user = UserFactory()
-        self.client.force_authenticate(
-            user=self.first_user
-        )
+        self.client.force_authenticate(user=self.first_user)

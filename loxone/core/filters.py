@@ -6,4 +6,4 @@ class CharInFilter(filters.BaseInFilter, filters.CharFilter):
 
 
 class BaseFilter(filters.FilterSet):
-    status = CharInFilter(field_name='status', lookup_expr='in')
+    status = CharInFilter(field_name="status", lookup_expr="in")

@@ -1,14 +1,13 @@
-from .base import *
+from .celery import *
+import sentry_sdk
+from sentry_sdk.integrations.django import DjangoIntegration
 
 DEBUG = False
-INSTALLED_APPS += [
-    'django_celery_results',
-    'django_celery_beat'
 
-]
-BROKER_URL = 'redis://localhost:6379'
-CELERY_RESULT_BACKEND = 'redis://localhost:6379'
-CELERY_ACCEPT_CONTENT = ['application/json']
-CELERY_TASK_SERIALIZER = 'json'
-CELERY_RESULT_SERIALIZER = 'json'
-CELERY_TIMEZONE = 'Europe/Berlin'
+
+sentry_sdk.init(
+    dsn="https://0e373a22cb4446f1b9b7c65033467e5b@o1070615.ingest.sentry.io/6066737",
+    integrations=[DjangoIntegration()],
+    traces_sample_rate=1.0,
+    send_default_pii=True,
+)

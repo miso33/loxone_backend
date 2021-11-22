@@ -1,3 +1,7 @@
 -r base.txt
 factory_boy==3.2.0
-flake8==3.9.2
+flake8==4.0.1
+black==21.6b0
+django-extensions==3.1.5
+pylint==2.11.1
+psycopg2==2.8.6

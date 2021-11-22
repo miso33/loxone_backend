@@ -10,8 +10,5 @@ class Pdf:
 
     def generate(self, template, options):
         return pdfkit.from_string(
-            template,
-            False,
-            configuration=self.config,
-            options=options
+            template, False, configuration=self.config, options=options
         )

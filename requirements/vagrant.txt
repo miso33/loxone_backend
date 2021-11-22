@@ -1,4 +1,10 @@
 -r base.txt
-django_celery_beat==1.1.1
-celery==5.1.2
-redis==3.5.3
+django_celery_beat
+celery
+redis
+factory_boy==3.2.0
+flake8==4.0.1
+black==21.6b0
+django-extensions==3.1.5
+pylint==2.11.1
+psycopg2-binary==2.9.2

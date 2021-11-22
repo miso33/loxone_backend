@@ -5,3 +5,4 @@ django_celery_beat
 celery
 redis
 psycopg2-binary==2.9.2
+django-scrapyd

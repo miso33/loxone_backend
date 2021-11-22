@@ -48,6 +48,7 @@ THIRD_PARTY_APPS = [
     "corsheaders",
     "django_cleanup.apps.CleanupConfig",
     "rangefilter",
+'scrapyd'
 ]
 
 PROJECT_APPS = [

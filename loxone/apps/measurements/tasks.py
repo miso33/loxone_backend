@@ -43,9 +43,10 @@ def scraper_previous_day():
 
 @shared_task(name="scraper_historical")
 def scraper_historical(date_start, date_end):
+    print("run")
     for building in Building.objects.filter(status="active"):
         try:
-            scrapyd.schedule(
+            task = scrapyd.schedule(
                 "default",
                 "HistoricalDataSpider",
                 settings={
@@ -61,6 +62,7 @@ def scraper_historical(date_start, date_end):
                     building.measurements.last_measurements(), ensure_ascii=False
                 ),
             )
+            print(task)
         except Exception as e:
             print(e)
             capture_exception(e)

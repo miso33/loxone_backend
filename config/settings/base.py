@@ -44,7 +44,6 @@ THIRD_PARTY_APPS = [
     "dj_rest_auth.registration",
     "rest_framework_simplejwt.token_blacklist",
     "rest_framework_filters",
-    "rest_framework_tracking",
     "import_export",
     "corsheaders",
     "django_cleanup.apps.CleanupConfig",

@@ -30,8 +30,6 @@ class BaseDataSpider(scrapy.Spider):
         pass
 
     def parse(self, response):
-        print("HOVNO")
-
         try:
             pages = response.css("li a::attr(href)").getall()
             pages.reverse()

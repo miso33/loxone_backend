@@ -92,8 +92,12 @@ def daily_report_emails():
                     )
                     day_report_email.content_subtype = "html"
                     email.sent = day_report_email.send()
+                    print(email.sent)
                     email.save()
                 except Exception as e:
+                    print(e)
                     capture_exception(e)
     except Exception as e:
+        print(e)
+        logger.error(e)
         capture_exception(e)

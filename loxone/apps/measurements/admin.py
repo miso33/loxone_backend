@@ -98,7 +98,6 @@ class BuildingFilter(admin.SimpleListFilter):
 class MeasurementAdmin(BaseAdmin):
     list_display = ("value", "time", "type", "zone", "building")
     list_filter = ("type", BuildingFilter, ZoneFilter, ("time", DateRangeFilter))
-    list_editable = ("time",)
 
     def get_queryset(self, request):
         return Measurement.all_objects.all()

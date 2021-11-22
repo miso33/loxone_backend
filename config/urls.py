@@ -23,7 +23,7 @@ from rest_framework_simplejwt.views import (
 )
 
 urlpatterns = [
-    path("grappelli/", include("grappelli.urls")),  # grappelli URLS
+    # path("grappelli/", include("grappelli.urls")),  # grappelli URLS
     path("admin/", admin.site.urls),
     path("__debug__/", include(debug_toolbar.urls)),
     path("account/", include("dj_rest_auth.urls")),

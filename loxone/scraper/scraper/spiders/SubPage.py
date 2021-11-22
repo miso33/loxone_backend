@@ -31,7 +31,6 @@ class SubPage:
                 return "CO2"
             return "unknown"
         except Exception as e:
-            print(e)
             return self.type
 
     def set_zone(self):

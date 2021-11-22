@@ -8,7 +8,6 @@ class Element:
             self.time = self.element_to_datetime(element)
             self.value = self.find_value(element)
         except Exception as e:
-            print(e)
             self.datetime_format = "%Y-%m-%d %H:%M:%S"
             self.time = None
             self.value = None

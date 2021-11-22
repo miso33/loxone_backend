@@ -15,7 +15,5 @@ PyJWT==2.3.0
 Scrapy==2.5.0
 scrapy_djangoitem==1.1.1
 scrapyd-api==0.0.1
-django_celery_results==2.2.0
 sentry-sdk==1.4.3
-django-grappelli==2.15.3
 django_admin_rangefilter==0.8.2

@@ -1,6 +1,7 @@
 from .celery import *
 import sentry_sdk
 from sentry_sdk.integrations.django import DjangoIntegration
+import mimetypes
 
 DEBUG = False
 

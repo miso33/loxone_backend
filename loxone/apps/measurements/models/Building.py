@@ -1,9 +1,11 @@
+from django.conf import settings
 from django.db import models
 
 from loxone.core.models import BaseModel
 
 
 class Building(BaseModel):
+    recipients = models.ManyToManyField(settings.AUTH_USER_MODEL)
     name = models.CharField(max_length=200, unique=True, verbose_name="Názov")
     url = models.CharField(max_length=500, unique=True)
     login = models.CharField(max_length=500)

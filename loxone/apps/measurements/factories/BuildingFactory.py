@@ -1,6 +1,6 @@
 import factory
 
-from ..models import Building
+from loxone.apps.measurements.models import Building
 
 
 class BuildingFactory(factory.django.DjangoModelFactory):

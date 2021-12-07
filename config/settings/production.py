@@ -6,8 +6,11 @@ DEBUG = False
 
 
 sentry_sdk.init(
-    dsn="https://0e373a22cb4446f1b9b7c65033467e5b@o1070615.ingest.sentry.io/6066737",
+    dsn="https://a5797ef14d444ec7ba5336b507a778f8@o1085724.ingest.sentry.io/6097334",
     integrations=[DjangoIntegration()],
     traces_sample_rate=1.0,
     send_default_pii=True,
 )
+SERVER_EMAIL = env("EMAIL_HOST_USER")
+
+ADMINS = [("admin", "reports@scrypta.sk")]

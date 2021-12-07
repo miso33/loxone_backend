@@ -20,3 +20,8 @@ def type_name(value):
         "humidity": "Vlhkosť",
         "CO2": "CO2",
     }[value]
+
+
+@register.filter(name="summary_statistics")
+def summary_statistics(value):
+    return 0

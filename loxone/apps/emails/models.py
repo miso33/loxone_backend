@@ -22,7 +22,7 @@ class Email(BaseModel):
     sent = models.BooleanField(default=False)
 
     class Meta:
-        ordering = ["sent", "send_schedule"]
+        ordering = ["-created"]
         default_related_name = "emails"
 
     def __str__(self):

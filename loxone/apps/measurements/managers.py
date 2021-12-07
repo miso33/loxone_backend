@@ -1,6 +1,7 @@
 import operator
 from datetime import datetime, date, timedelta
 from functools import reduce
+from statistics import mean
 
 from django.contrib.postgres.aggregates import ArrayAgg
 from django.db import models
@@ -102,27 +103,84 @@ class MeasurementManager(models.Manager):
             building_template["days"] = {}
             days = building_template["days"]
             day = today.replace(day=1)
-            while day <= today:
+            while day < today:
                 days[day.strftime("%d.%m.%Y")] = {}
                 for zone in building["zones"]:
                     days[day.strftime("%d.%m.%Y")][zone] = ["-"] * (
                             len(building["types"]) * 3
                     )
                 day += timedelta(days=1)
+            days["summary_statistics"] = {}
+            for zone in building["zones"]:
+                days["summary_statistics"][zone] = []
+                for type_number in range(len(building["types"]) * 3):
+                    if type_number % 3 == 0:
+                        days["summary_statistics"][zone].append([])
+                    if type_number % 3 == 1:
+                        days["summary_statistics"][zone].append(None)
+                    if type_number % 3 == 2:
+                        days["summary_statistics"][zone].append(None)
+
         return templates_data
 
     def get_templates_data(self):
         type_labels = ["temperature", "humidity", "CO2"]
         templates_data = self.get_empty_templates_data()
+        final_summary_statistics = {}
         for measurement in self.month_statistics():
-            for key, value_name in enumerate(
-                    ["average_value", "min_value", "max_value"]
-            ):
-                templates_data[measurement["building__name"]]["days"][
-                    measurement["day"].strftime("%d.%m.%Y")
-                ][measurement["zone_name"]][
-                    key + 3 * type_labels.index(measurement["type_name"])
-                    ] = measurement[
-                    value_name
-                ]
+            try:
+                for key, value_name in enumerate(
+                        ["average_value", "min_value", "max_value"]
+                ):
+                    templates_data[measurement["building__name"]]["days"][
+                        measurement["day"].strftime("%d.%m.%Y")
+                    ][measurement["zone_name"]][
+                        key + 3 * type_labels.index(measurement["type_name"])
+                        ] = measurement[
+                        value_name
+                    ]
+                    summary_statistics = templates_data[measurement["building__name"]]["days"][
+                        "summary_statistics"
+                    ][measurement["zone_name"]]
+                    final_summary_statistics_key = f'{measurement["building__name"]}{measurement["zone_name"]}'
+                    if final_summary_statistics_key not in final_summary_statistics:
+                        final_summary_statistics[
+                            final_summary_statistics_key
+                        ] = summary_statistics
+                    summary_statistics_key = key + 3 * type_labels.index(measurement["type_name"])
+                    summary_statistics_value = summary_statistics[summary_statistics_key]
+                    if value_name == "max_value":
+                        if not summary_statistics_value or summary_statistics_value < measurement[
+                            value_name
+                        ]:
+                            summary_statistics[summary_statistics_key] = measurement[
+                                value_name
+                            ]
+                    if value_name == "min_value":
+                        if not summary_statistics_value or summary_statistics_value > measurement[
+                            value_name
+                        ]:
+                            summary_statistics[summary_statistics_key] = measurement[
+                                value_name
+                            ]
+                    if value_name == "average_value":
+                        summary_statistics_value.append(
+                            measurement[
+                                value_name
+                            ]
+                        )
+            except Exception as e:
+                print(e)
+        for key1, statistics in final_summary_statistics.items():
+            statistics_to_change = statistics
+            for key2, statistic in enumerate(statistics):
+                if key2 % 3 == 0:
+                    if statistic:
+                        statistics_to_change[key2] = round(mean(statistic), 2)
+                    else:
+                        statistics_to_change[key2] = "-"
+                else:
+                    if not statistic:
+                        statistics_to_change[key2] = "-"
+
         return templates_data

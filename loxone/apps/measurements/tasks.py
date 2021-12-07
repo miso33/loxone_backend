@@ -38,12 +38,11 @@ def scraper_previous_day():
                 ),
             )
         except Exception as e:
-            capture_exception(e)
+            logger.exception(e)
 
 
 @shared_task(name="scraper_historical")
 def scraper_historical(date_start, date_end):
-    print("run")
     for building in Building.objects.filter(status="active"):
         try:
             task = scrapyd.schedule(
@@ -64,24 +63,23 @@ def scraper_historical(date_start, date_end):
             )
             print(task)
         except Exception as e:
-            print(e)
-            capture_exception(e)
+            logger.exception(e)
 
 
 @shared_task(name="daily_report_emails")
 def daily_report_emails():
-    try:
-        with mail.get_connection() as connection:
-            for building_name, data in Measurement.objects.get_templates_data().items():
+    with mail.get_connection() as connection:
+        for building_name, data in Measurement.objects.get_templates_data().items():
+            users = list(User.objects.filter(
+                is_superuser=False, is_active=True, buildings__name=building_name
+            ).values_list("email", flat=True))
+            if users:
                 email = Email(
-                    recipients=list(
-                        User.objects.filter(
-                            is_superuser=False, is_active=True
-                        ).values_list("email", flat=True)
-                    ),
-                    subject="{} - Denný report".format(building_name),
+                    recipients=users,
+                    subject=f"{building_name} - Denný report",
                     body_link="email.html",
                     data={"building_name": building_name, "building_data": data},
+                    attempts_number=1,
                 )
                 email.save()
                 try:
@@ -97,8 +95,5 @@ def daily_report_emails():
                     email.sent = day_report_email.send()
                     email.save()
                 except Exception as e:
+                    print(e)
                     logger.error(e)
-                    capture_exception(e)
-    except Exception as e:
-        logger.error(e)
-        capture_exception(e)

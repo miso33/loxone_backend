@@ -58,12 +58,22 @@
     <tbody>
     {% for day, zones in building_data.days.items %}
     <tr>
+        {% if day != "summary_statistics" %}
         <td>{{day}}</td>
-        {% for zone, values in zones.items %}
+        {% for values in zones.values %}
         {% for value in values %}
         <td>{{value}}</td>
         {% endfor %}
         {% endfor %}
+        {% else %}
+        <td>Súhrné štatistiky</td>
+        {% for key,values in zones.items %}
+        {% for value in values %}
+        <td>{{value}}</td>
+        {% endfor %}
+        {% endfor %}
+
+        {% endif %}
     </tr>
     {% endfor %}
 

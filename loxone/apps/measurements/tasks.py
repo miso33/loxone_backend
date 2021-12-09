@@ -95,5 +95,4 @@ def daily_report_emails():
                     email.sent = day_report_email.send()
                     email.save()
                 except Exception as e:
-                    print(e)
                     logger.error(e)

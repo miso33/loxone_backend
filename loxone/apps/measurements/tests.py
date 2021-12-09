@@ -183,34 +183,34 @@ class MeasurementAPITestCase(APITestCase):
                 last_measurement.value,
             )
 
-    def test_get_empty_templates_data(self):
-        today = datetime.today()
-        buildings = BuildingFactory.create_batch(1)
-        types = ["temperature", "humidity", "CO2"]
-        zone_number = 2
-        for building in buildings:
-            for type_name in types:
-                for zone_number in range(1, zone_number + 1):
-                    day = today.replace(day=1)
-                    while day < today:
-                        MeasurementFactory.create_batch(
-                            24,
-                            building=building,
-                            type=type_name,
-                            zone=f"Zone{zone_number}",
-                            url=f"Zone{zone_number}",
-                        )
-                        day += timedelta(days=1)
-                    MeasurementFactory.reset_sequence(0)
-        empty_templates = Measurement.objects.get_empty_templates_data()
-        print(empty_templates)
-        # for building, empty_template in empty_templates.items():
-        #     self.assertTrue(Building.objects.filter(name=building).exists())
-        #     self.assertEqual(len(empty_template['days']), today.day)
-        #     for day in empty_template['days'].values():
-        #         for zone, value in day.items():
-        #             self.assertTrue(Measurement.objects.filter(zone=zone).exists())
-        #             self.assertEqual(len(value), len(types) * 3)
+    # def test_get_empty_templates_data(self):
+    #     today = datetime.today()
+    #     buildings = BuildingFactory.create_batch(1)
+    #     types = ["temperature", "humidity", "CO2"]
+    #     zone_number = 2
+    #     for building in buildings:
+    #         for type_name in types:
+    #             for zone_number in range(1, zone_number + 1):
+    #                 day = today.replace(day=1)
+    #                 while day < today:
+    #                     MeasurementFactory.create_batch(
+    #                         24,
+    #                         building=building,
+    #                         type=type_name,
+    #                         zone=f"Zone{zone_number}",
+    #                         url=f"Zone{zone_number}",
+    #                     )
+    #                     day += timedelta(days=1)
+    #                 MeasurementFactory.reset_sequence(0)
+    #     empty_templates = Measurement.objects.get_empty_templates_data()
+    #     print(empty_templates)
+    #     # for building, empty_template in empty_templates.items():
+    #     #     self.assertTrue(Building.objects.filter(name=building).exists())
+    #     #     self.assertEqual(len(empty_template['days']), today.day)
+    #     #     for day in empty_template['days'].values():
+    #     #         for zone, value in day.items():
+    #     #             self.assertTrue(Measurement.objects.filter(zone=zone).exists())
+    #     #             self.assertEqual(len(value), len(types) * 3)
 
     def test_get_templates_data(self):
         today = datetime.today()
@@ -233,51 +233,3 @@ class MeasurementAPITestCase(APITestCase):
                     MeasurementFactory.reset_sequence(0)
 
         templates = Measurement.objects.get_templates_data()
-        # print(templates)
-        print(templates)
-        # for building, empty_template in empty_templates.items():
-        #     self.assertTrue(Building.objects.filter(name=building).exists())
-        #     self.assertEqual(len(empty_template['days']), today.day)
-        #     for day in empty_template['days'].values():
-        #         for zone, value in day.items():
-        #
-        #             self.assertEqual(len(value), len(types) * 3)
-    #
-    # def test_month_average_statistics_by_month(self):
-    #     building_number = 3
-    #     types = ["temperature", "humidity", "CO2"]
-    #     zone_number = 3
-    #     days = 3
-    #     measurements = {}
-    #     buildings = BuildingFactory.create_batch(building_number)
-    #     for building in buildings:
-    #         for type in types:
-    #             for zone_number in range(1, zone_number + 1):
-    #                 average = []
-    #                 MeasurementFactory.reset_sequence(0)
-    #                 key = f"{building.name}*{type}*Zone{zone_number}"
-    #                 measurements[key] = []
-    #                 for day in range(1, days + 1):
-    #                     measurements[key] += MeasurementFactory.create_batch(
-    #                         24,
-    #                         building=building,
-    #                         type=type,
-    #                         zone="Zone{}".format(zone_number),
-    #                         url="Zone{}".format(zone_number),
-    #                     )
-    #                 for measurement in measurements[key]:
-    #                     average.append(measurement.value)
-    #                 measurements[key] = round(mean(average), 2)
-    #     print(measurements)
-    #     print(len(measurements))
-    #                 # print(measurements[key])
-    #     measurement_statistics = Measurement.objects.month_statistics()
-    # for stat in measurement_statistics:
-    #     day_key = stat["day"].strftime("%d.%m.%Y")
-    #     stat_key = "{0}*{1}*{2}*{3}".format(
-    #         stat["building__name"], stat["type_name"], stat["zone_name"], day_key
-    #     )
-    #     self.assertIn(stat_key, measurements)
-    #     self.assertAlmostEqual(
-    #         measurements[stat_key], float(stat["average_value"]), 1
-    #     )

@@ -1,32 +1,10 @@
 from django.contrib import admin
-from rangefilter.filters import DateRangeFilter
+from import_export import widgets
+from import_export.resources import ModelResource, Field
+from rangefilter.filters import DateTimeRangeFilter
 
-from loxone.core.admin import BaseAdmin, BaseStatusAdmin
-from .models import Building, Measurement
-
-
-@admin.action(description="Aktívna budova")
-def make_active(modeladmin, request, queryset):
-    # pylint: disable=unused-argument
-    queryset.update(status="active")
-
-
-@admin.action(description="Neaktívna budova")
-def make_inactive(modeladmin, request, queryset):
-    # pylint: disable=unused-argument
-    queryset.update(status="inactive")
-
-
-class BuildingAdmin(BaseStatusAdmin):
-    exclude = ("is_removed",) + BaseStatusAdmin.exclude
-    list_display = ("name", "url", "get_recipients", "status")
-    actions = [make_active, make_inactive]
-
-    def get_recipients(self, obj):
-        return ", ".join([recipient.email for recipient in obj.recipients.filter(is_active=True)])
-
-    def get_queryset(self, request):
-        return Building.all_objects.all()
+from loxone.core.admin import BaseAdmin
+from ..models import Building, Measurement
 
 
 class ZoneFilter(admin.SimpleListFilter):
@@ -98,13 +76,39 @@ class BuildingFilter(admin.SimpleListFilter):
         return queryset.filter(**filters)
 
 
+class BarcodeWidget(widgets.CharWidget):
+    def render(self, value, obj):
+        type_label = {
+            "temperature": "Teplota",
+            "humidity": "Vlhkosť",
+            "CO2": "CO2",
+        }
+        if value in type_label:
+            return type_label[value]
+        else:
+            return "unknown"
+
+
+class ProductGroupsResource(ModelResource):
+    type = Field(attribute="type", column_name="Typ", widget=BarcodeWidget())
+    building__name = Field(attribute="building__name", column_name="Budova")
+    zone = Field(attribute="zone", column_name="Zóna")
+    time = Field(attribute="time", column_name="Dátum a čas", widget=widgets.DateWidget("%H:%M:%S %d.%m.%Y"))
+    value = Field(attribute="value", column_name="Hodnota")
+
+    def get_queryset(self):
+        return self._meta.model.objects.order_by('time')
+
+    class Meta:
+        model = Measurement
+        fields = ("building__name", "type", "zone", "time", 'value')
+        export_order = ("building__name", "type", "zone", "time", 'value')
+
+
 class MeasurementAdmin(BaseAdmin):
     list_display = ("value", "time", "type", "zone", "building")
-    list_filter = ("type", BuildingFilter, ZoneFilter, ("time", DateRangeFilter))
+    list_filter = ("type", BuildingFilter, ZoneFilter, ("time", DateTimeRangeFilter))
+    resource_class = ProductGroupsResource
 
     def get_queryset(self, request):
         return Measurement.all_objects.all()
-
-
-admin.site.register(Building, BuildingAdmin)
-admin.site.register(Measurement, MeasurementAdmin)

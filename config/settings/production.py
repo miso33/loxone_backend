@@ -16,4 +16,3 @@ sentry_sdk.init(
 SERVER_EMAIL = env("EMAIL_HOST_USER")
 
 ADMINS = [("admin", "reports@scrypta.sk")]
-print("production")

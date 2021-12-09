@@ -22,6 +22,9 @@ from rest_framework_simplejwt.views import (
 )
 from django.conf.urls.static import static
 from django.conf import settings
+
+admin.site.site_header = "Štatistiky"
+
 urlpatterns = [
                   path("admin/", admin.site.urls),
                   path("account/", include("dj_rest_auth.urls")),
